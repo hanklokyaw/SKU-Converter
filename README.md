@@ -1,51 +1,83 @@
-# SKU Converter App
+# SKU-Converter
 
-This is a Flask application that converts and searches SKUs (Stock Keeping Units) from a given dataset. The application supports exact match, starts with, ends with, and contains search queries.
+A Flask-based web application for converting and searching SKUs with advanced search capabilities.
 
-## Prerequisites
+## Demo
+See the demo [here](https://www.htet.cloud/convert_sku).
 
-- Python 3.6 or higher
-- pip (Python package installer)
+## Features
+- Convert and search SKUs using various query formats.
+- Search options include exact match, starts with, ends with, and contains.
+- Intuitive web interface for ease of use.
+- Displays results in a tabular format for easy interpretation.
 
 ## Installation
 
-1. Clone the repository:
+### Prerequisites
+- Python 3.x
+- pip (Python package installer)
 
-    ```bash
-    git clone https://github.com/yourusername/sku-converter.git
-    cd sku-converter
+### Steps
+1. **Clone the repository:**
+    ```sh
+    git clone https://github.com/hanklokyaw/SKU-Converter.git
+    cd SKU-Converter
     ```
 
-2. Install the required Python packages:
+2. **Create a virtual environment:**
+    ```sh
+    python -m venv venv
+    ```
 
-    ```bash
+3. **Activate the virtual environment:**
+    - On Windows:
+        ```sh
+        venv\Scripts\activate
+        ```
+    - On macOS and Linux:
+        ```sh
+        source venv/bin/activate
+        ```
+
+4. **Install the required packages:**
+    ```sh
     pip install -r requirements.txt
     ```
 
-3. Place your `sample_sku_data.xlsx` file in the root directory of the project. This file should include 'Old SKU', 'New SKU', and 'Description' columns.
+5. **Add your SKU data:**
+    - Place your SKU data in the `sample_sku_data.xlsx` file.
 
-## Running the Application
-
-1. Start the Flask server:
-
-    ```bash
+6. **Run the application:**
+    ```sh
     python main.py
     ```
 
-2. Open your web browser and go to `http://localhost:5003` to access the SKU Converter.
+7. **Open your browser and navigate to:**
+    ```
+    http://127.0.0.1:5003
+    ```
 
 ## Usage
-
-- Enter an SKU in the input field and click the "Convert" button to see the matching results.
+- Enter the SKU in the input field.
+- Click the "Convert" button or press Enter.
+- The application will display the converted SKUs and descriptions in a table format.
 - The application supports the following search formats:
     - `CZ?` to search any information that starts with `CZ`.
     - `?1.25` to search any information that ends with `1.25`.
     - `?TOP?` to search any information that includes `TOP`.
-
+ 
 ## Note
-
 In the sample dataset the SKU starts with CZ, GEN, and TIFFANY are included for testing.
 
-## License
+## File Overview
+- `main.py`: The main Flask application file.
+- `templates/index.html`: The HTML template for the web interface.
+- `requirements.txt`: The list of dependencies to install.
+- `sample_sku_data.xlsx`: Sample SKU data file.
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+## Contributing
+Contributions are welcome! Please create an issue or submit a pull request for any improvements or bug fixes.
+
+## License
+This project is licensed under the MIT License.
+
