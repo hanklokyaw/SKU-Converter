@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SKU Converter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .result {
+            margin-top: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>SKU Converter</h1>
+        <input type="text" id="skuInput" placeholder="Enter SKU...">
+        <button onclick="convertSKU()">Convert</button>
+        <h4>Note: In the new SKU, we use the letter "<span style="color: red;">l</span>" instead of "<span style="color: red;">/</span>". For example, "3/4" becomes "3l4".</h4>
+        <p>Example: <br>
+            1. Use <i>"Fanfare3?"</i> to search any information that starts with <strong>Fanfare3</strong>.<br>
+            2. Use <i>"?1.25"</i> to search any information that ends with <strong>1.25</strong>.<br>
+            3. Use <i>"?TOP?"</i> to search any information that includes <strong>TOP</strong>.
+        </p>
+
+        <div class="result" id="resultDiv"></div>
+    </div>
+
+    <script>
+        function convertSKU() {
+            var skuInput = document.getElementById('skuInput').value;
+            var resultDiv = document.getElementById('resultDiv');
+
+            // Make GET request to Flask server
+            fetch('/convert_sku?sku=' + skuInput)
+            .then(response => response.json())
+            .then(data => {
+                var resultHTML = '';
+                if (data.error) {
+                    resultHTML = '<p>Error: ' + data.error + '</p>';
+                } else {
+                    resultHTML += '<table>';
+                    resultHTML += '<tr><th>Old SKU</th><th>New SKU</th><th>Description</th></tr>';
+                    data.forEach(row => {
+                        resultHTML += '<tr>';
+                        resultHTML += '<td>' + row['Old SKU'] + '</td>';
+                        resultHTML += '<td>' + row['New SKU'] + '</td>';
+                        resultHTML += '<td>' + row['Description'] + '</td>';
+                        resultHTML += '</tr>';
+                    });
+                    resultHTML += '</table>';
+                }
+                resultDiv.innerHTML = resultHTML;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                resultDiv.innerHTML = '<p>Error: Unable to fetch data from server</p>';
+            });
+
+            // Add event listener for Enter key on the input field
+            document.getElementById('skuInput').addEventListener('keydown', function(event) {
+                if (event.key === 'Enter') {
+                    convertSKU();
+                }
+            });
+        }
+    </script>
+</body>
+</html>
