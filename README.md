@@ -38,13 +38,13 @@ This is a Flask application that converts and searches SKUs (Stock Keeping Units
 
 - Enter an SKU in the input field and click the "Convert" button to see the matching results.
 - The application supports the following search formats:
-    - `Fanfare3?` to search any information that starts with `Fanfare3`.
+    - `CZ?` to search any information that starts with `CZ`.
     - `?1.25` to search any information that ends with `1.25`.
     - `?TOP?` to search any information that includes `TOP`.
 
 ## Note
 
-In the new SKU format, the letter "l" is used instead of "/". For example, "3/4" becomes "3l4".
+In the sample dataset the SKU starts with CZ, GEN, and TIFFANY are included for testing.
 
 ## License
 
