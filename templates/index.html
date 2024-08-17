@@ -76,6 +76,13 @@
     </div>
 
     <script>
+        // Add event listener for Enter key on page load
+        document.getElementById('skuInput').addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                convertSKU();
+            }
+        });
+
         function convertSKU() {
             var skuInput = document.getElementById('skuInput').value;
             var resultDiv = document.getElementById('resultDiv');
@@ -104,13 +111,6 @@
             .catch(error => {
                 console.error('Error:', error);
                 resultDiv.innerHTML = '<p>Error: Unable to fetch data from server</p>';
-            });
-
-            // Add event listener for Enter key on the input field
-            document.getElementById('skuInput').addEventListener('keydown', function(event) {
-                if (event.key === 'Enter') {
-                    convertSKU();
-                }
             });
         }
     </script>
