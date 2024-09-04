@@ -8,13 +8,15 @@ df_netsuite = pd.read_csv('sku_convert_db.csv')
 
 # Subset Net Suite SKU prepare to merge
 df_in_netsuite = df_netsuite[(df_netsuite['OLD SAGE SKU'].isin(df_sage['Item Code']))]
-df_in_netsuite.rename(columns={'Name' : 'New SKU', 'OLD SAGE SKU': 'Old SKU'}, inplace=True)
-df_in_netsuite = df_in_netsuite[['Old SKU', 'New SKU', 'Description']]
-# print(df_in_netsuite[['Old SKU', 'New SKU']])
+df_in_netsuite_not_in_sage = df_netsuite[(~df_netsuite['OLD SAGE SKU'].isin(df_sage['Item Code'])) &
+                                         (~df_netsuite['OLD SAGE SKU'].isna())]
+df_in_netsuite = pd.concat([df_in_netsuite, df_in_netsuite_not_in_sage], ignore_index=True)
+df_in_netsuite = df_in_netsuite[['Name', 'OLD SAGE SKU', 'Description']]
+df_in_netsuite.rename(columns={'OLD SAGE SKU':'Old SKU', 'Name':'New SKU'}, inplace=True)
+print(df_in_netsuite)
 
 # Remove Inactive SKU
 df_sage = df_sage[df_sage['InactiveItem'] == 'N']
-# print(df_sage)
 
 # Subset SKU not in Net Suite and prepare to Merge
 df_not_in_netsuite = df_sage[~df_sage['Item Code'].isin(df_netsuite['OLD SAGE SKU'])]
@@ -22,17 +24,19 @@ df_not_in_netsuite = df_not_in_netsuite[['Item Code', 'Description']]
 df_not_in_netsuite.loc[:,'New SKU'] = '*** NO NEW SKU ***'
 df_not_in_netsuite.rename(columns={'Item Code': 'Old SKU'}, inplace=True)
 df_not_in_netsuite = df_not_in_netsuite[['Old SKU', 'New SKU', 'Description']]
-# print(df_not_in_netsuite)
+print(df_not_in_netsuite)
 
 # Subset SKU not in Sage and prepare to Merge
-df_not_in_sage = df_netsuite[(~df_netsuite['OLD SAGE SKU'].isin(df_sage['Item Code']))]
+df_not_in_sage = df_netsuite[(~df_netsuite['OLD SAGE SKU'].isin(df_sage['Item Code'])) &
+                                         (df_netsuite['OLD SAGE SKU'].isna())]
 df_not_in_sage.loc[:,'Old SKU'] = '*** NO OLD SKU ***'
 df_not_in_sage.rename(columns={'Name':'New SKU'}, inplace=True)
 df_not_in_sage = df_not_in_sage[['Old SKU', 'New SKU', 'Description']]
-# print(df_not_in_sage[['Old SKU','New SKU']])
+print(df_not_in_sage[['Old SKU','New SKU']])
 
 merge_df = pd.concat([df_in_netsuite, df_not_in_netsuite, df_not_in_sage])
-# print(merge_df)
+print(merge_df)
+merge_df.to_csv("test_merge.csv", index=False)
 
 
 def search_sku(sku, df):
